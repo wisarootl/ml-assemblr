@@ -1,11 +1,12 @@
-from typing import Optional
+from typing import Literal, Optional
 
 from .base_classes import BaseDataPod, Transformer
+from .constant import TRAIN, VALID
 from .data_pod import DataPod
 
 
 class DataFrameTransformer(Transformer):
-    target_df_name: Optional[str] = None
+    target_df_name: str = ""
 
     def _infer_df_name_from_main_df_name(self, data_pod: DataPod):
         if not self.target_df_name:
@@ -13,8 +14,20 @@ class DataFrameTransformer(Transformer):
 
     def fit_transform(self, data_pod: DataPod) -> DataPod:  # type: ignore[override]
         self._infer_df_name_from_main_df_name(data_pod)
-        data_pod = super().fit_transform(data_pod)
+        data_pod = super().fit_transform(data_pod)  # type: ignore[assignment]
         return data_pod
+
+
+class FittingTransformer(Transformer):
+    learn_on_split: Optional[
+        Literal["train", "valid", "test", "production"]
+        | set[Literal["train", "valid", "test", "production"]]
+    ] = set([TRAIN, VALID])
+
+
+class UnfittingTransformer(Transformer):
+    def _transform(self, data_pod: DataPod) -> DataPod:  # type: ignore[override]
+        return self._fit_transform(data_pod)
 
 
 class Serializer(Transformer):

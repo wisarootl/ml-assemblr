@@ -1,9 +1,10 @@
 from abc import ABC, abstractmethod
+from typing import Optional
 
 import pandas as pd
 from pydantic import BaseModel
 
-from .column_types import ColumnTypes
+from .column_type import ColumnType
 
 
 class BaseDataPod(ABC):
@@ -55,4 +56,22 @@ class DataFrameNode(BaseModel):
 
     name: str
     df: pd.DataFrame
-    column_type: ColumnTypes
+    column_type: ColumnType
+
+    def top_down_features_inference(self, excluded_column_type_list: Optional[list[str]] = None):
+        all_columns = list(self.df.columns)
+
+        if not excluded_column_type_list:
+            excluded_column_type_list = [
+                column_type for column_type in vars(self.column_type) if column_type not in {"features"}
+            ]
+
+        excluded_columns = set(
+            [
+                column
+                for column_type in excluded_column_type_list
+                for column in getattr(self.column_type, column_type)
+            ]
+        )
+
+        self.column_type.features = [column for column in all_columns if column not in excluded_columns]

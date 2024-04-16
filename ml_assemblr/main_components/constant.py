@@ -2,10 +2,10 @@
 MAIN = "main_df"
 
 # dataset names
-PRODUCTION = "production"
-TEST = "test"
 TRAIN = "train"
 VALID = "valid"
+TEST = "test"
+PRODUCTION = "production"
 
 # columns names
 SPLIT = "split"
