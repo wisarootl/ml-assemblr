@@ -17,7 +17,7 @@ class ValueReplacer(UnfittingTransformer, DataFrameTransformer):
 
     replacing_mappers: dict[str, dict]
 
-    def _fit_transform(self, data_pod: DataPod) -> DataPod:  # type: ignore[override]
+    def _transform(self, data_pod: DataPod) -> DataPod:  # type: ignore[override]
         df = data_pod.dfs[self.target_df_name]
         for column, replacing_mapper in self.replacing_mappers.items():
             df[column] = df[column].replace(replacing_mapper)

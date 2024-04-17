@@ -20,7 +20,7 @@ class LabelEncoder(FittingTransformer, DataFrameTransformer):
             self.encoder = SkLearnLabelEncoder()
 
     def _fit_transform(self, data_pod: DataPod) -> DataPod:  # type: ignore[override]
-        df = data_pod.slice_df(split=self.learn_on_split, columns=None, table_name=self.target_df_name)
+        df = data_pod.slice_df(split=self.fit_on_split, columns=None, table_name=self.target_df_name)
         for col_name in self.col_names:
             self.encoders[col_name] = deepcopy(self.encoder)
             self.encoders[col_name].fit(df[col_name])

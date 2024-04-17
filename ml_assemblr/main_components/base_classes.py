@@ -1,10 +1,13 @@
 from abc import ABC, abstractmethod
-from typing import Optional
+from typing import TYPE_CHECKING, Optional, Union
 
 import pandas as pd
 from pydantic import BaseModel
 
 from .column_type import ColumnType
+
+if TYPE_CHECKING:
+    from ml_assemblr.main_components.data_pod import DataPod
 
 
 class BaseDataPod(ABC):
@@ -34,7 +37,7 @@ class Transformer(BaseModel, ABC):
     def _transform(self, data_pod: BaseDataPod) -> BaseDataPod:
         pass
 
-    def fit_transform(self, data_pod: BaseDataPod) -> BaseDataPod:
+    def fit_transform(self, data_pod: Union[BaseDataPod, "DataPod"]) -> Union[BaseDataPod, "DataPod"]:
         data_pod = self._fit_transform(data_pod)
         data_pod = self._call_hook(data_pod)
 
