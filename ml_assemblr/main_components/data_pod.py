@@ -1,4 +1,4 @@
-import copy
+from copy import deepcopy
 from typing import Any, Callable, Union
 
 import pandas as pd
@@ -38,23 +38,28 @@ class DataPod(BaseDataPod):
         self.variables: dict[str, Any] = {}
 
     # getters and setters
-    dfs = property(dfs)
-    column_types = property(column_types)
-    main_df = property(main_df)
-    main_column_type = property(main_column_type)
+    dfs: dict[str, pd.DataFrame] = property(dfs)
+    column_types: dict[str, ColumnType] = property(column_types)
+    main_df: pd.DataFrame = property(main_df)
+    main_column_type: ColumnType = property(main_column_type)
 
     def fit_transform(self, transformer: Transformer) -> Union["BaseDataPod", "DataPod"]:
         # preventing using the same transformer with other data_pod
-        transformer = copy.deepcopy(transformer)
+        transformer = deepcopy(transformer)
 
-        return transformer.fit_transform(self)
+        # return transformer.fit_transform(self)
+        dp_test = transformer.fit_transform(self)
+        return dp_test
 
     def transform(self, transformer: Transformer) -> Union["BaseDataPod", "DataPod"]:
         return transformer.transform(self)
 
-    def append_footprint(self, transformer: Transformer) -> Union["BaseDataPod", "DataPod"]:
+    def append_footprint(self, transformer: Transformer) -> "DataPod":
         self.footprints.transformers.append(transformer)
         return self
+
+    def copy(self) -> "DataPod":
+        return deepcopy(self)
 
     # df methods
     slice_df = slice_df
