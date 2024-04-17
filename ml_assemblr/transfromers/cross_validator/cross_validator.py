@@ -5,7 +5,7 @@ from ml_assemblr.main_components.data_pod import DataPod
 from ml_assemblr.main_components.data_pod_list import DataPodList
 from ml_assemblr.main_components.transformer import DataFrameTransformer
 from ml_assemblr.main_components.constant import TRAIN, VALID
-from sklearn.model_selection import BaseCrossValidator
+from sklearn.model_selection import BaseCrossValidator, BaseShuffleSplit
 
 
 class CrossValidator(DataFrameTransformer):
@@ -14,7 +14,7 @@ class CrossValidator(DataFrameTransformer):
         Literal["train", "valid", "test", "production"]
         | set[Literal["train", "valid", "test", "production"]]
     ] = set(["train", "valid"])
-    sklearn_cv: BaseCrossValidator
+    sklearn_cv: Union[BaseCrossValidator, BaseShuffleSplit]
 
     def _fit_transform(self, data_pod: DataPod) -> DataPod:  # type: ignore[override]
         if not self.splitter_col_name:
