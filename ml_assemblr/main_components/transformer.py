@@ -1,6 +1,6 @@
 from typing import Literal, Optional
 
-from .base_classes import BaseDataPod, Transformer
+from .base_class import BaseDataPod, Transformer
 from .data_pod import DataPod
 
 

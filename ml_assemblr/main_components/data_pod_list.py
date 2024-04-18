@@ -1,4 +1,4 @@
-from .base_classes import BaseDataPod, Transformer
+from .base_class import BaseDataPod, Transformer
 from ml_assemblr.main_components.data_pod import DataPod
 
 

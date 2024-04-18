@@ -11,7 +11,7 @@ class OneHotEncoder(FittingTransformer, DataFrameTransformer):
     col_names: list[str]
 
     # learnable parameter
-    encoder: SkLearnOneHotEncoder = SkLearnOneHotEncoder()
+    encoder: SkLearnOneHotEncoder = SkLearnOneHotEncoder(handle_unknown="ignore")
     target_col_names: Optional[list[str]] = None
 
     def _fit_transform(self, data_pod: DataPod) -> DataPod:  # type: ignore[override]

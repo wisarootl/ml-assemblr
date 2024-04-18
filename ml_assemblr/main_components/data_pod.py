@@ -5,10 +5,10 @@ import pandas as pd
 
 from ml_assemblr.utils.string_case_utils import to_screaming_snake_case
 
-from .base_classes import BaseDataPod, DataFrameNode, Transformer
+from .base_class import BaseDataPod, DataFrameNode, Transformer
 from .column_type import ColumnType
-from .data_pod_methods.df_methods import delete_dfs, peek_df, peek_main_df, slice_df
-from .data_pod_methods.getters_and_setters import column_types, dfs, main_column_type, main_df
+from .data_pod_method.df_method import delete_dfs, peek_df, peek_main_df, slice_df
+from .data_pod_method.getter_and_setter import column_types, dfs, main_column_type, main_df
 
 
 class DataPod(BaseDataPod):
