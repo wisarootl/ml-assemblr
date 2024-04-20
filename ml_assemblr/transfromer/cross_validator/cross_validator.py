@@ -1,11 +1,11 @@
-from copy import deepcopy
-from typing import Optional, Union, Literal
+from typing import Literal, Optional, Union
 
+from sklearn.model_selection import BaseCrossValidator, BaseShuffleSplit
+
+from ml_assemblr.main_components.constant import TRAIN, VALID
 from ml_assemblr.main_components.data_pod import DataPod
 from ml_assemblr.main_components.data_pod_list import DataPodList
 from ml_assemblr.main_components.transformer import DataFrameTransformer
-from ml_assemblr.main_components.constant import TRAIN, VALID
-from sklearn.model_selection import BaseCrossValidator, BaseShuffleSplit
 
 
 class CrossValidator(DataFrameTransformer):

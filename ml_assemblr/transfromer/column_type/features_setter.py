@@ -1,6 +1,7 @@
+from typing import Optional
+
 from ml_assemblr.main_components.data_pod import DataPod
 from ml_assemblr.main_components.transformer import DataFrameTransformer, UnfittingTransformer
-from typing import Optional
 
 
 class TopDownFeaturesSetter(UnfittingTransformer, DataFrameTransformer):

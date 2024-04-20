@@ -41,6 +41,7 @@ class Transformer(BaseModel, ABC):
     def fit_transform(
         self, data_pod: Union[BaseDataPod, "DataPod"]
     ) -> Union[BaseDataPod, "DataPod", "DataPodList"]:
+        data_pod = self._call_hook_pre_fit_transform(data_pod)
         data_pod = self._fit_transform(data_pod)
         data_pod = self._call_hook(data_pod)
 
@@ -49,6 +50,11 @@ class Transformer(BaseModel, ABC):
     def transform(self, data_pod: BaseDataPod) -> Union[BaseDataPod, "DataPod", "DataPodList"]:
         data_pod = self._transform(data_pod)
         data_pod = self._call_hook(data_pod)
+        return data_pod
+
+    def _call_hook_pre_fit_transform(
+        self, data_pod: BaseDataPod
+    ) -> Union[BaseDataPod, "DataPod", "DataPodList"]:
         return data_pod
 
     def _call_hook(self, data_pod: BaseDataPod) -> Union[BaseDataPod, "DataPod", "DataPodList"]:

@@ -18,7 +18,7 @@ class DataPod(BaseDataPod):
         dfs: dict[str, pd.DataFrame] = {},
         column_types: dict[str, ColumnType] = {},
         main_df_name: str = "",
-        clean_column_name_func: Callable = to_screaming_snake_case,
+        clean_column_name: Callable = to_screaming_snake_case,
     ):
         self.main_df_name = main_df_name
         self.df_nodes: dict[str, DataFrameNode] = {}
@@ -34,7 +34,7 @@ class DataPod(BaseDataPod):
         from .transformer import Serializer  # import outside top level to prevent a circular import
 
         self.footprints: Serializer = Serializer(transformers=[])
-        self.clean_column_name_func = clean_column_name_func
+        self.clean_column_name = clean_column_name
         self.variables: dict[str, Any] = {}
 
     # getters and setters

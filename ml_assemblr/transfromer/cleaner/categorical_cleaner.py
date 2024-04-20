@@ -1,7 +1,7 @@
 from typing import Optional
 
-import pandas as pd
 import numpy as np
+import pandas as pd
 
 from ml_assemblr.main_components.data_pod import DataPod
 from ml_assemblr.main_components.transformer import DataFrameTransformer, FittingTransformer

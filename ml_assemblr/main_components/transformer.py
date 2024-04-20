@@ -11,9 +11,9 @@ class DataFrameTransformer(Transformer):
         if not self.target_df_name:
             self.target_df_name = data_pod.main_df_name
 
-    def fit_transform(self, data_pod: DataPod) -> DataPod:
+    def _call_hook_pre_fit_transform(self, data_pod: DataPod) -> DataPod:
+        data_pod = super()._call_hook_pre_fit_transform(data_pod)
         self._infer_df_name_from_main_df_name(data_pod)
-        data_pod = super().fit_transform(data_pod)  # type: ignore[assignment]
         return data_pod
 
 

@@ -1,28 +1,14 @@
 import logging
-import platform
-import sys
-import time
 from collections.abc import Callable, Collection
-from datetime import datetime
-from functools import wraps
 from typing import Iterable, Union
 
 import orjson
 import structlog
 from structlog import processors
 from structlog.processors import CallsiteParameter
-from structlog.typing import EventDict, FilteringBoundLogger, Processor, WrappedLogger
+from structlog.typing import EventDict, Processor, WrappedLogger
 
-
-def is_in_notebook() -> bool:
-    """Check whether the code is running inside Jupyter Notebook."""
-    try:
-        get_ipython = sys.modules["IPython"].get_ipython
-        if "IPKernelApp" not in get_ipython().config:
-            return False
-    except Exception:
-        return False
-    return True
+from ml_assemblr.utils.notebook_utils import is_in_notebook
 
 
 class FilteredCallsiteParameterAdder(processors.CallsiteParameterAdder):

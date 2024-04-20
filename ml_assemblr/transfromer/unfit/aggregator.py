@@ -24,7 +24,7 @@ class Aggregator(UnfittingTransformer, DataFrameTransformer):
 
         agg_source_df: pd.DataFrame = source_df.groupby(self.groupby_col_names).agg(self.agg_functions)
         self.target_col_names = [
-            data_pod.clean_column_name_func(
+            data_pod.clean_column_name(
                 f"{self.target_col_prefix + '_' if self.target_col_prefix else ''}{col[0]}_{col[1]}"
             )
             for col in agg_source_df.columns
