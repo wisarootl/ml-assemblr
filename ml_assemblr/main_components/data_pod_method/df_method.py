@@ -18,6 +18,7 @@ def slice_df(
     ] = None,
     columns: Optional[Literal["features", "label", "prediction"] | list[str]] = None,
     table_name: Optional[str] = None,
+    split_idx_in_column_type: int = 0,
 ) -> pd.DataFrame:
     if not table_name:
         table_name = self.main_df_name
@@ -25,9 +26,9 @@ def slice_df(
     column_type = self.column_types[table_name]
 
     if isinstance(split, str):
-        relevant_row = df[column_type.splitters[0]] == split
+        relevant_row = df[column_type.splitters[split_idx_in_column_type]] == split
     elif isinstance(split, set):
-        relevant_row = df[column_type.splitters[0]].isin(split)
+        relevant_row = df[column_type.splitters[split_idx_in_column_type]].isin(split)
     else:
         relevant_row = pd.Series(True, index=df.index)
 

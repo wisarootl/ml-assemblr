@@ -31,8 +31,12 @@ class XGBModel(BaseModel):
 
     def _fit_transform(self, data_pod: DataPod) -> DataPod:
         df_train = data_pod.slice_df(
-            split=self.fit_on_split, columns=None, table_name=self.target_df_name
+            split=self.fit_on_split,
+            columns=None,
+            table_name=self.target_df_name,
+            split_idx_in_column_type=self.split_idx_in_column_type,
         )
+
         label_col_name = data_pod.column_types[self.target_df_name].labels[self.label_idx_in_column_type]
         df_train_features = df_train[data_pod.column_types[self.target_df_name].features]
         df_train_label = df_train[label_col_name]

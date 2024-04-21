@@ -3,7 +3,7 @@ from typing import Any, Callable, Union
 
 import pandas as pd
 
-from ml_assemblr.utils.string_case_utils import to_screaming_snake_case
+from ml_assemblr.utils.string_case_utils import to_snake_case
 
 from .base_class import BaseDataPod, DataFrameNode, Transformer
 from .column_type import ColumnType
@@ -18,7 +18,7 @@ class DataPod(BaseDataPod):
         dfs: dict[str, pd.DataFrame] = {},
         column_types: dict[str, ColumnType] = {},
         main_df_name: str = "",
-        clean_column_name: Callable = to_screaming_snake_case,
+        clean_column_name: Callable = to_snake_case,
     ):
         self.main_df_name = main_df_name
         self.df_nodes: dict[str, DataFrameNode] = {}
