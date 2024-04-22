@@ -12,9 +12,13 @@ make_requirement_dir:
 gen_requirement: make_requirement_dir
 	poetry export -f requirements.txt --output requirements/requirements.txt
 
-	
+
 gen_dev_requirement: make_requirement_dir
 	poetry export -f requirements.txt --output requirements/dev-requirements.txt --with optional,dev,test
 
 
 gen_requirements: gen_requirement gen_dev_requirement
+
+
+test:
+	poetry run pytest --cov=ml_assemblr --cov-report=term --cov-report=xml
