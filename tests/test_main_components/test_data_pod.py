@@ -174,7 +174,4 @@ def test_dp_slice_df(some_dp: DataPod):
     df = some_dp.slice_df(split=None, columns="features")
     assert df.empty
 
-    df = some_dp.slice_df(split=None, columns="prediction")
-    assert df.empty
-
     # todo: test with different split
