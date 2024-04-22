@@ -28,7 +28,7 @@ jobs:
           poetry-version: '1.8.2'
 
       - name: Install dependencies
-        run: poetry install --only=main,test
+        run: poetry install --only=main,test,dev
 
       - name: Run tests with coverage
         run: make test

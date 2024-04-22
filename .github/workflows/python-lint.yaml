@@ -1,23 +1,34 @@
-repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v4.6.0
-    hooks:
-      - id: trailing-whitespace
-      - id: end-of-file-fixer
+name: Python Lint
 
-  - repo: local
-    hooks:
-      - id: make-lint
-        name: linting
-        entry: make lint
-        language: system
-        pass_filenames: false
-        types: [file]
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    types:
+      - opened
+      - synchronize
 
-  - repo: https://github.com/gitguardian/ggshield
-    rev: v1.26.0
-    hooks:
-      - id: ggshield
-        language: python
-        stages: [commit]
-        args: ['secret', 'scan', 'pre-commit']
+jobs:
+  linter_and_code_checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Set up Poetry
+        uses: Gr1N/setup-poetry@v8
+        with:
+          poetry-version: '1.8.2'
+
+      - name: Install dependencies
+        run: poetry install --only=dev
+
+      - name: Lint and check
+        run: make lint
