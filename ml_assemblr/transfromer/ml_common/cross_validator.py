@@ -13,7 +13,7 @@ class CrossValidator(DataFrameTransformer):
     cross_validate_on_split: Optional[
         Literal["train", "valid", "test", "production"]
         | set[Literal["train", "valid", "test", "production"]]
-    ] = set(["train", "valid"])
+    ] = {"train", "valid"}
     sklearn_cv: Union[BaseCrossValidator, BaseShuffleSplit]
     cv_idx_map_var_name: str = "cv_idx_map"
     cv_split_idx_in_column_type_var_name: str = "cv_split_idx_in_column_type"

@@ -3,6 +3,7 @@ import pytest
 
 from ml_assemblr.main_components.column_type import ColumnType
 from ml_assemblr.main_components.data_pod import DataPod
+from ml_assemblr.transfromer.ml_common.splitter import ShuffleSplitter
 from ml_assemblr.utils.string_case_utils import to_snake_case
 
 
@@ -64,3 +65,12 @@ def some_dp(some_main_df: pd.DataFrame, some_support_df: pd.DataFrame) -> DataPo
     )
 
     return dp
+
+
+@pytest.fixture()
+def some_dp_with_splitting(some_dp: DataPod) -> DataPod:
+
+    splitter = ShuffleSplitter(col_name="split", test_size=0.2, valid_size=0.2, random_seed=0)
+    some_dp = some_dp.fit_transform(splitter)
+
+    return some_dp
