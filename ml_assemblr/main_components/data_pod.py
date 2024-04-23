@@ -7,7 +7,8 @@ from ml_assemblr.utils.string_case_utils import to_snake_case
 
 from .base_class import BaseDataPod, DataFrameNode, Transformer
 from .column_type import ColumnType
-from .data_pod_method.df_method import delete_dfs, peek_df, peek_main_df, slice_df
+from .data_pod_method.df_method import (clean_column_names_in_dfs, delete_dfs, peek_df, peek_main_df,
+                                        slice_df)
 from .data_pod_method.getter_and_setter import column_types, dfs, main_column_type, main_df
 
 
@@ -36,6 +37,7 @@ class DataPod(BaseDataPod):
         self.footprints: Serializer = Serializer(transformers=[])
         self.clean_column_name = clean_column_name
         self.variables: dict[str, Any] = {}
+        self.clean_column_names_in_dfs()
 
     # getters and setters
     dfs: dict[str, pd.DataFrame] = property(dfs)
@@ -66,3 +68,4 @@ class DataPod(BaseDataPod):
     delete_dfs = delete_dfs
     peek_df = peek_df
     peek_main_df = peek_main_df
+    clean_column_names_in_dfs = clean_column_names_in_dfs

@@ -1,13 +1,13 @@
-import logging
 from typing import TYPE_CHECKING, Literal, Optional
 
 import pandas as pd
+import structlog
 from IPython.core.display_functions import display
+
+from ml_assemblr.main_components.column_type import ColumnType
 
 if TYPE_CHECKING:
     from ml_assemblr.main_components.data_pod import DataPod
-
-logger = logging.getLogger(__name__)
 
 
 def slice_df(
@@ -19,6 +19,8 @@ def slice_df(
     columns: Optional[Literal["features", "label", "prediction"] | list[str]] = None,
     table_name: Optional[str] = None,
     split_idx_in_column_type: int = 0,
+    label_idx_in_column_type: int = 0,
+    prediction_idx_in_column_type: int = 0,
 ) -> pd.DataFrame:
     if not table_name:
         table_name = self.main_df_name
@@ -39,9 +41,9 @@ def slice_df(
     elif columns == "features":
         return df.loc[relevant_row, column_type.features]
     elif columns == "label":
-        return df.loc[relevant_row, [column_type.labels[0]]]
+        return df.loc[relevant_row, [column_type.labels[label_idx_in_column_type]]]
     elif columns == "prediction":
-        return df.loc[relevant_row, [column_type.predictions[0]]]
+        return df.loc[relevant_row, [column_type.predictions[prediction_idx_in_column_type]]]
     elif is_list_of_str:
         return df.loc[relevant_row, columns]
     else:
@@ -63,7 +65,7 @@ def delete_dfs(
         if df_name in self.df_nodes:
             del self.df_nodes[df_name]
         else:
-            logger.warning(f"There is no table_name {df_name} to delete.")
+            structlog.getLogger().warning(f"There is no table name `{df_name}` to delete.")
 
 
 def peek_df(
@@ -81,3 +83,14 @@ def peek_main_df(
     n: int = 5,
 ):
     self.peek_df(df_name=self.main_df_name, n=n)
+
+
+def clean_column_names_in_dfs(self: "DataPod"):
+    for _, df_node in self.df_nodes.items():
+        df_node.df.columns = [self.clean_column_name(column_name) for column_name in df_node.df.columns]
+        df_node.column_type = ColumnType(
+            **{
+                column_type: [self.clean_column_name(column_name) for column_name in column_names]
+                for column_type, column_names in df_node.column_type.dict().items()
+            }
+        )

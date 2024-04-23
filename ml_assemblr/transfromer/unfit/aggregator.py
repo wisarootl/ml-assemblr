@@ -32,7 +32,9 @@ class Aggregator(UnfittingTransformer, DataFrameTransformer):
 
         agg_source_df.columns = self.target_col_names
 
-        target_df = pd.merge(target_df, agg_source_df, on=self.groupby_col_names, how="left")
+        target_df = pd.merge(
+            target_df, agg_source_df, on=self.groupby_col_names, how="left", validate="1:1"
+        )
 
         data_pod.df_nodes[self.target_df_name].df = target_df
         return data_pod
