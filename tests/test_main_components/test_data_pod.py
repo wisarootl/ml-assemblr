@@ -115,7 +115,10 @@ def test_dp_delete_dfs_unexisting(some_dp: DataPod):
         assert cap_logs[0]["event"] == "There is no table name `unexisting_df` to delete."
 
 
-def test_dp_slice_df(some_dp: DataPod):
+def test_dp_slice_df(some_dp_with_splitting: DataPod):
+    some_dp = some_dp_with_splitting
+
+    # test columns slicing
     df = some_dp.slice_df(split=None, columns="label")
     assert df.shape[1] == 1
     assert df.columns == ["label"]
@@ -124,4 +127,27 @@ def test_dp_slice_df(some_dp: DataPod):
     df = some_dp.slice_df(split=None, columns="features")
     assert df.empty
 
-    # todo: test with different split
+    with pytest.raises(IndexError):
+        df = some_dp.slice_df(split=None, columns="prediction")
+
+    df = some_dp.slice_df(split=None, columns=["id", "age"])
+    assert "id" in df.columns
+    assert "age" in df.columns
+    assert "gender" not in df.columns
+
+    with pytest.raises(ValueError):
+        df = some_dp.slice_df(split=None, columns="unsupported_column_type")
+
+    # test rows slicing
+    variations = [
+        ("train", 6),
+        ("valid", 1),
+        ("test", 1),
+        ({"train", "valid"}, 7),
+        ({"train", "test"}, 7),
+        ({"valid", "test"}, 2),
+    ]
+    for split, expected_row_count in variations:
+        df = some_dp.slice_df(split=split, columns="label")
+        assert df.shape[0] == expected_row_count
+        assert df.shape[1] == 1

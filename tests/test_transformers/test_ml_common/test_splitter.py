@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 
 from ml_assemblr.main_components.data_pod import DataPod
-from ml_assemblr.transfromer.splitter.splitter import ShuffleSplitter
+from ml_assemblr.transfromer.ml_common.splitter import ShuffleSplitter
 
 
 @pytest.mark.parametrize(
@@ -14,7 +14,7 @@ from ml_assemblr.transfromer.splitter.splitter import ShuffleSplitter
         if test_size + valid_size <= 1
     ],
 )
-def test_df_shuffle_splitter_fit_transform(some_dp: DataPod, test_size: float, valid_size: float):
+def test_shuffle_splitter_fit_transform(some_dp: DataPod, test_size: float, valid_size: float):
     splitter = ShuffleSplitter(
         col_name="split", test_size=test_size, valid_size=valid_size, random_seed=0
     )
@@ -27,18 +27,18 @@ def test_df_shuffle_splitter_fit_transform(some_dp: DataPod, test_size: float, v
 
     value_counts = some_dp.main_df["split"].value_counts()
     assert (train_size_count == 0 and "train" not in value_counts) or (
-        np.allclose(value_counts["train"], train_size_count, rtol=1)
+        abs(value_counts["train"] - train_size_count) <= 1
     )
     assert (valid_size_count == 0 and "valid" not in value_counts) or (
-        np.allclose(value_counts["valid"], valid_size_count, rtol=1)
+        abs(value_counts["valid"] - valid_size_count) <= 1
     )
     assert (test_size_count == 0 and "test" not in value_counts) or (
-        np.allclose(value_counts["test"], test_size_count, rtol=1)
+        abs(value_counts["test"] - test_size_count) <= 1
     )
     assert some_dp.main_df["split"].isna().sum() == 0
 
 
-def test_df_shuffle_splitter_transform(some_dp: DataPod):
+def test_shuffle_splitter_transform(some_dp: DataPod):
     prod_dp = some_dp.copy()
 
     splitter = ShuffleSplitter(col_name="split", test_size=0.2, valid_size=0.2, random_seed=0)

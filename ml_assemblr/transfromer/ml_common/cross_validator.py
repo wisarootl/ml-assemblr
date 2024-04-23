@@ -1,4 +1,4 @@
-from typing import Literal, Optional, Union
+from typing import Literal, Optional
 
 from sklearn.model_selection import BaseCrossValidator, BaseShuffleSplit
 
@@ -8,13 +8,13 @@ from ml_assemblr.main_components.transformer import DataFrameTransformer
 
 
 class CrossValidator(DataFrameTransformer):
-    split_col_name: Union[str, None] = None
-    target_split_col_name_prefix: Union[str, None] = None
+    split_col_name: str | None = None
+    target_split_col_name_prefix: str | None = None
     cross_validate_on_split: Optional[
         Literal["train", "valid", "test", "production"]
         | set[Literal["train", "valid", "test", "production"]]
-    ] = set(["train", "valid"])
-    sklearn_cv: Union[BaseCrossValidator, BaseShuffleSplit]
+    ] = {"train", "valid"}
+    sklearn_cv: BaseCrossValidator | BaseShuffleSplit
     cv_idx_map_var_name: str = "cv_idx_map"
     cv_split_idx_in_column_type_var_name: str = "cv_split_idx_in_column_type"
 
