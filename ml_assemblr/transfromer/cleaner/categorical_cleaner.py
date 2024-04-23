@@ -21,11 +21,11 @@ class CategoricalCleaner(FittingTransformer, DataFrameTransformer):
 
     # learnable parameter
     clean_categorical_columns_map: dict[str, Optional[set]] = {}
-    # category_map = {
+    # ```category_map = {
     #   "column_1": {"cat_1", "cat_2", "cat_3"},
     #   "column_2": None, # if None, it will fit from data
     #   "column_3": None
-    # }
+    # }```
 
     def _fit_transform(self, data_pod: DataPod) -> DataPod:
         df = data_pod.slice_df(split=self.fit_on_split, columns=None, table_name=self.target_df_name)

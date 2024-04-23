@@ -1,6 +1,6 @@
 import logging
 from collections.abc import Callable, Collection
-from typing import Iterable, Union
+from typing import Iterable, Optional
 
 import orjson
 import structlog
@@ -16,7 +16,7 @@ class FilteredCallsiteParameterAdder(processors.CallsiteParameterAdder):
     def __init__(
         self,
         parameters: Collection[CallsiteParameter] = processors.CallsiteParameterAdder._all_parameters,
-        additional_ignores: Union[list[str], None] = None,
+        additional_ignores: Optional[list[str]] = None,
         filtered_min_level=logging.ERROR,
     ) -> None:
         super().__init__(parameters, additional_ignores)
@@ -31,8 +31,8 @@ class FilteredCallsiteParameterAdder(processors.CallsiteParameterAdder):
 
 
 def setup_logging(
-    is_pretty_render: Union[bool, None] = None,
-    is_fast_json_render: Union[bool, None] = None,
+    is_pretty_render: Optional[bool] = None,
+    is_fast_json_render: Optional[bool] = None,
     include_locals_in_traceback: bool = False,
     severity_level: int = logging.INFO,
 ):

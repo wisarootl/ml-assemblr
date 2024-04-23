@@ -40,16 +40,15 @@ class DataPod(BaseDataPod):
         self.clean_column_names_in_dfs()
 
     # getters and setters
-    dfs: dict[str, pd.DataFrame] = property(dfs)
-    column_types: dict[str, ColumnType] = property(column_types)
-    main_df: pd.DataFrame = property(main_df)
-    main_column_type: ColumnType = property(main_column_type)
+    dfs: dict[str, pd.DataFrame] = dfs
+    column_types: dict[str, ColumnType] = column_types
+    main_df: pd.DataFrame = main_df
+    main_column_type: ColumnType = main_column_type
 
     def fit_transform(self, transformer: Transformer) -> Union["BaseDataPod", "DataPod"]:
         # preventing using the same transformer with other data_pod
         transformer = deepcopy(transformer)
 
-        # return transformer.fit_transform(self)
         dp_test = transformer.fit_transform(self)
         return dp_test
 

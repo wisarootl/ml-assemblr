@@ -21,7 +21,7 @@ def get_trained_model(dp: DataPod, model_index: int):
 
 class BaseModel(FittingTransformer, DataFrameTransformer):
     pred_col_prefix: str = "pred"
-    pred_col_name: str = None
+    pred_col_name: Optional[str] = None
     label_idx_in_column_type: int = 0
 
     # cross validation config
