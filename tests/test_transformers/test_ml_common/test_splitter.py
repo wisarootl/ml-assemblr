@@ -10,14 +10,22 @@ from ml_assemblr.transfromer.ml_common.splitter import ShuffleSplitter
     [
         (test_size, valid_size)
         for test_size in np.arange(0, 1.2, 0.2)
-        for valid_size in np.arange(0, 1.2 - test_size, 0.2)
-        if test_size + valid_size <= 1
+        for valid_size in np.arange(0, 1.2, 0.2)
     ],
 )
 def test_shuffle_splitter_fit_transform(some_dp: DataPod, test_size: float, valid_size: float):
+    prod_dp = some_dp.copy()
+
+    if (test_size + valid_size > 1) or not (0 <= test_size <= 1) or not (0 <= valid_size <= 1):
+        with pytest.raises(ValueError):
+            ShuffleSplitter(col_name="split", test_size=test_size, valid_size=valid_size, random_seed=0)
+        return
+
     splitter = ShuffleSplitter(
         col_name="split", test_size=test_size, valid_size=valid_size, random_seed=0
     )
+
+    # test fit_transform
     some_dp = some_dp.fit_transform(splitter)
     assert "split" in some_dp.main_df.columns
 
@@ -37,13 +45,7 @@ def test_shuffle_splitter_fit_transform(some_dp: DataPod, test_size: float, vali
     )
     assert some_dp.main_df["split"].isna().sum() == 0
 
-
-def test_shuffle_splitter_transform(some_dp: DataPod):
-    prod_dp = some_dp.copy()
-
-    splitter = ShuffleSplitter(col_name="split", test_size=0.2, valid_size=0.2, random_seed=0)
-    some_dp = some_dp.fit_transform(splitter)
-
+    # test transform
     prod_dp = prod_dp.transform(some_dp.footprints.transformers[-1])
 
     assert "split" in prod_dp.main_df.columns

@@ -13,6 +13,17 @@ class ShuffleSplitter(FittingTransformer, DataFrameTransformer):
     valid_size: float
     random_seed: Optional[int] = None
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.test_size + self.valid_size > 1:
+            raise ValueError("test_size + valid_size must be <= 1")
+
+        if not (0 <= self.test_size <= 1):
+            raise ValueError("test_size must be with in [0, 1] range")
+
+        if not (0 <= self.valid_size <= 1):
+            raise ValueError("valid_size must be with in [0, 1] range")
+
     def _fit_transform(self, data_pod: DataPod) -> DataPod:
         # add split column
         df = data_pod.dfs[self.target_df_name]

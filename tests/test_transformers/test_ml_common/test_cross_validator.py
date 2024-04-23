@@ -6,6 +6,8 @@ from ml_assemblr.transfromer.ml_common.cross_validator import CrossValidator
 
 def test_cross_validator(some_dp_with_splitting: DataPod):
     some_dp = some_dp_with_splitting
+    prod_dp = some_dp.copy()
+
     cross_validator = CrossValidator(
         sklearn_cv=ShuffleSplit(n_splits=3, test_size=0.2, random_state=42),
         cross_validate_on_split={"train", "valid"},
@@ -24,3 +26,5 @@ def test_cross_validator(some_dp_with_splitting: DataPod):
         assert abs(value_counts["test"] - 1) <= 1
         cv_test_idx = some_dp.main_df[some_dp.main_df[split_col_name] == "test"].index
         assert set(original_test_idx) == set(cv_test_idx)
+
+    prod_dp = prod_dp.transform(some_dp.footprints.transformers[-1])
