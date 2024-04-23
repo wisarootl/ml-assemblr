@@ -23,7 +23,7 @@ def some_main_df() -> pd.DataFrame:
 @pytest.fixture()
 def some_support_df() -> pd.DataFrame:
     data = {
-        "Employee_ID": [0, 0, 1, 1, 2, 2, 3, 3, 4, 4],
+        "ID": [0, 0, 1, 1, 2, 2, 3, 3, 4, 4],
         "Project_ID": [101, 102, 103, 104, 105, 106, 107, 108, 109, 110],
         "Project_Name": [
             "Project A",

@@ -1,4 +1,4 @@
-from typing import Callable, Optional, Union
+from typing import Callable, Optional
 
 import pandas as pd
 
@@ -8,8 +8,8 @@ from ml_assemblr.main_components.transformer import DataFrameTransformer, Unfitt
 
 class Aggregator(UnfittingTransformer, DataFrameTransformer):
     source_df_name: str
-    groupby_col_names: Union[str, list[str]]
-    agg_functions: Union[Callable, str, dict, list]
+    groupby_col_names: str | list[str]
+    agg_functions: Callable | str | dict | list
     filter_function: Optional[Callable] = None
     target_col_prefix: str = ""
 
