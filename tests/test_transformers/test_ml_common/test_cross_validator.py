@@ -4,7 +4,7 @@ from ml_assemblr.main_components.data_pod import DataPod
 from ml_assemblr.transfromer.ml_common.cross_validator import CrossValidator
 
 
-def test_df_cross_validator(some_dp_with_splitting: DataPod):
+def test_cross_validator(some_dp_with_splitting: DataPod):
     some_dp = some_dp_with_splitting
     cross_validator = CrossValidator(
         sklearn_cv=ShuffleSplit(n_splits=3, test_size=0.2, random_state=42),
