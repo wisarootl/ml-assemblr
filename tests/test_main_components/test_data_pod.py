@@ -75,7 +75,7 @@ def test_column_type_after_init_dp(some_dp: DataPod):
         ("1234_Name", "1234_name"),
     ],
 )
-def test_dp_clean_column_name(some_dp: DataPod, input_name, expected_output):
+def test_dp_clean_column_name(some_dp: DataPod, input_name: str, expected_output: str):
     assert some_dp.clean_column_name(input_name) == expected_output
 
 
