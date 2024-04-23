@@ -27,13 +27,13 @@ def test_df_shuffle_splitter_fit_transform(some_dp: DataPod, test_size: float, v
 
     value_counts = some_dp.main_df["split"].value_counts()
     assert (train_size_count == 0 and "train" not in value_counts) or (
-        np.allclose(value_counts["train"], train_size_count, rtol=1)
+        abs(value_counts["train"] - train_size_count) <= 1
     )
     assert (valid_size_count == 0 and "valid" not in value_counts) or (
-        np.allclose(value_counts["valid"], valid_size_count, rtol=1)
+        abs(value_counts["valid"] - valid_size_count) <= 1
     )
     assert (test_size_count == 0 and "test" not in value_counts) or (
-        np.allclose(value_counts["test"], test_size_count, rtol=1)
+        abs(value_counts["test"] - test_size_count) <= 1
     )
     assert some_dp.main_df["split"].isna().sum() == 0
 
