@@ -35,6 +35,6 @@ class ShuffleSplitter(FittingTransformer, DataFrameTransformer):
         splits[train_size_count : train_size_count + valid_size_count] = VALID
         splits[train_size_count + valid_size_count :] = TEST
 
-        np.random.seed(self.random_seed)
-        np.random.shuffle(splits)
+        rng = np.random.default_rng(self.random_seed)
+        rng.shuffle(splits)
         return splits
