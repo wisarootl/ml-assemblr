@@ -19,7 +19,7 @@ def multiply(series_1: pd.Series, series_2: pd.Series) -> pd.Series:
 
 
 def divide(series_1: pd.Series, series_2: pd.Series) -> pd.Series:
-    return series_1 * series_2
+    return series_1 / series_2
 
 
 class BicolumnsOperator(UnfittingTransformer, DataFrameTransformer):
