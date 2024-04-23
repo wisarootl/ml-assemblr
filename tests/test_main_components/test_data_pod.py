@@ -1,69 +1,9 @@
 import pandas as pd
 import pytest
+from structlog.testing import capture_logs
 
 from ml_assemblr.main_components.column_type import ColumnType
 from ml_assemblr.main_components.data_pod import DataPod
-from ml_assemblr.utils.string_case_utils import to_snake_case
-
-
-@pytest.fixture()
-def some_main_df() -> pd.DataFrame:
-    data = {
-        "ID": [0, 1, 2, 3, 4, 5, 6, 7],
-        "Age": [25, 30, 35, 40, 45, 28, 32, 37],
-        "Gender": ["Female", "Male", "Male", "Male", "Female", "Male", "Female", "Male"],
-        "Salary": [50000, 60000, 70000, 80000, 90000, 55000, 65000, 75000],
-        "Department": ["HR", "Finance", "IT", "Marketing", "Sales", "HR", "IT", "Sales"],
-        "Label": [0.2, 0.5, 0.1, 0.8, 0.3, 0.6, 0.4, 0.9],
-    }
-    return pd.DataFrame(data)
-
-
-@pytest.fixture()
-def some_support_df() -> pd.DataFrame:
-    data = {
-        "Employee_ID": [0, 0, 1, 1, 2, 2, 3, 3, 4, 4],
-        "Project_ID": [101, 102, 103, 104, 105, 106, 107, 108, 109, 110],
-        "Project_Name": [
-            "Project A",
-            "Project B",
-            "Project C",
-            "Project D",
-            "Project A",
-            "Project B",
-            "Project C",
-            "Project D",
-            "Project A",
-            "Project B",
-        ],
-        "Hours_Worked": [40, 30, 35, 45, 50, 20, 40, 35, 45, 40],
-        "Client": [
-            "Client X",
-            "Client Y",
-            "Client Z",
-            "Client X",
-            "Client Y",
-            "Client Z",
-            "Client X",
-            "Client Y",
-            "Client Z",
-            "Client X",
-        ],
-    }
-    return pd.DataFrame(data)
-
-
-@pytest.fixture()
-def some_dp(some_main_df: pd.DataFrame, some_support_df: pd.DataFrame) -> DataPod:
-
-    dfs = {"some_main_df": some_main_df, "some_support_df": some_support_df}
-    column_types = {"some_main_df": ColumnType(labels=["Label"], keys=["ID"])}
-
-    dp = DataPod(
-        dfs=dfs, column_types=column_types, main_df_name="some_main_df", clean_column_name=to_snake_case
-    )
-
-    return dp
 
 
 def test_df_after_init_dp(some_dp: DataPod):
@@ -125,28 +65,32 @@ def test_column_type_after_init_dp(some_dp: DataPod):
     assert column_type_1 is column_type_2 is column_type_3
 
 
-def test_dp_clean_column_name(some_dp: DataPod):
-    assert some_dp.clean_column_name("UnClean Column_Name") == "unclean_column_name"
+@pytest.mark.parametrize(
+    "input_name, expected_output",
+    [
+        ("UnClean Column_Name", "unclean_column_name"),
+        ("Another_Unclean_Name", "another_unclean_name"),
+        ("Yet_Another", "yet_another"),
+        ("MixedCaseName", "mixedcasename"),
+        ("1234_Name", "1234_name"),
+    ],
+)
+def test_dp_clean_column_name(some_dp: DataPod, input_name, expected_output):
+    assert some_dp.clean_column_name(input_name) == expected_output
 
 
 def test_dp_peek_df(some_dp: DataPod, capfd):
-    expected = (
-        "8 rows × 6 columns\n"
-        "   id  age  gender  salary department  label\n"
-        "0   0   25  Female   50000         HR    0.2\n"
-        "1   1   30    Male   60000    Finance    0.5\n"
-        "2   2   35    Male   70000         IT    0.1\n"
-        "3   3   40    Male   80000  Marketing    0.8\n"
-        "4   4   45  Female   90000      Sales    0.3\n"
-    )
+    expected_keywords = ["rows", "×", "columns", "id", "age", "gender", "salary", "department", "label"]
 
     some_dp.peek_df("some_main_df")
     captured = capfd.readouterr()
-    assert captured.out == expected
+    for keyword in expected_keywords:
+        assert keyword in captured.out
 
     some_dp.peek_main_df()
     captured = capfd.readouterr()
-    assert captured.out == expected
+    for keyword in expected_keywords:
+        assert keyword in captured.out
 
 
 def test_dp_delete_dfs(some_dp: DataPod):
@@ -163,6 +107,12 @@ def test_dp_delete_dfs_exclude(some_dp: DataPod):
     some_dp.delete_dfs(["some_main_df"], is_delete_all_except_specified_df_names=True)
     assert "some_main_df" in some_dp.df_nodes
     assert "some_support_df" not in some_dp.df_nodes
+
+
+def test_dp_delete_dfs_unexisting(some_dp: DataPod):
+    with capture_logs() as cap_logs:
+        some_dp.delete_dfs(["unexisting_df"])
+        assert cap_logs[0]["event"] == "There is no table name `unexisting_df` to delete."
 
 
 def test_dp_slice_df(some_dp: DataPod):

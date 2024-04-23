@@ -1,15 +1,13 @@
-import logging
 from typing import TYPE_CHECKING, Literal, Optional
 
 import pandas as pd
+import structlog
 from IPython.core.display_functions import display
 
 from ml_assemblr.main_components.column_type import ColumnType
 
 if TYPE_CHECKING:
     from ml_assemblr.main_components.data_pod import DataPod
-
-logger = logging.getLogger(__name__)
 
 
 def slice_df(
@@ -67,7 +65,7 @@ def delete_dfs(
         if df_name in self.df_nodes:
             del self.df_nodes[df_name]
         else:
-            logger.warning(f"There is no table_name {df_name} to delete.")
+            structlog.getLogger().warning(f"There is no table name `{df_name}` to delete.")
 
 
 def peek_df(
