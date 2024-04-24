@@ -1,7 +1,7 @@
 from sklearn.model_selection import ShuffleSplit
 
 from ml_assemblr.main_components.data_pod import DataPod
-from ml_assemblr.transfromer.ml_common.cross_validator import CrossValidator
+from ml_assemblr.transformer.ml_common.cross_validator import CrossValidator
 
 
 def test_cross_validator(some_dps_with_splitting: tuple[DataPod, DataPod]):

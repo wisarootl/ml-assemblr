@@ -1,5 +1,5 @@
 from ml_assemblr.main_components.data_pod import DataPod
-from ml_assemblr.transfromer.unfit.aggregator import Aggregator
+from ml_assemblr.transformer.unfit.aggregator import Aggregator
 
 
 def test_aggregator(

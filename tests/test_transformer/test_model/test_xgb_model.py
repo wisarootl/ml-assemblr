@@ -1,5 +1,5 @@
 from ml_assemblr.main_components.data_pod import DataPod
-from ml_assemblr.transfromer.model.xgb_model import XGBModel
+from ml_assemblr.transformer.model.xgb_model import XGBModel
 
 
 def test_xgb_model(some_dps_with_features_setter: tuple[DataPod, DataPod]):
