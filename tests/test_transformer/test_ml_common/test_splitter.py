@@ -28,6 +28,7 @@ def test_shuffle_splitter(some_dp: DataPod, test_size: float, valid_size: float)
     # test fit_transform
     some_dp = some_dp.fit_transform(splitter)
     assert "split" in some_dp.main_df.columns
+    assert "split" in some_dp.main_column_type.splitters
 
     test_size_count = int(test_size * some_dp.main_df.shape[0])
     valid_size_count = int(valid_size * some_dp.main_df.shape[0])
@@ -49,6 +50,7 @@ def test_shuffle_splitter(some_dp: DataPod, test_size: float, valid_size: float)
     prod_dp = prod_dp.transform(some_dp.footprints.transformers[-1])
 
     assert "split" in prod_dp.main_df.columns
+    assert "split" in prod_dp.main_column_type.splitters
 
     value_counts = prod_dp.main_df["split"].value_counts()
     assert value_counts["production"] == prod_dp.main_df.shape[0]

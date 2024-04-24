@@ -2,9 +2,8 @@ from ml_assemblr.main_components.data_pod import DataPod
 from ml_assemblr.transfromer.encoder.one_hot_encoder import OneHotEncoder
 
 
-def test_one_hot_encoder(some_dp_with_splitting: DataPod):
-    some_dp = some_dp_with_splitting
-    prod_dp = some_dp.copy()
+def test_one_hot_encoder(some_dps_with_splitting: tuple[DataPod, DataPod]):
+    some_dp, prod_dp = some_dps_with_splitting
 
     assert "gender" in some_dp.main_df.columns
 

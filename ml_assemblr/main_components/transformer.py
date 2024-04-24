@@ -42,16 +42,16 @@ class Serializer(Transformer):
                 flattened_transformers.append(transformer)
         self.transformers = flattened_transformers
 
-    def _fit_transform(self, data_pod: BaseDataPod):
+    def _fit_transform(self, data_pod: BaseDataPod | DataPod) -> BaseDataPod | DataPod:
         for transformer in self.transformers:
             data_pod = data_pod.fit_transform(transformer)
 
         return data_pod
 
-    def _transform(self, data_pod: BaseDataPod):
+    def _transform(self, data_pod: BaseDataPod | DataPod) -> BaseDataPod | DataPod:
         for transformer in self.transformers:
             data_pod = transformer.transform(data_pod)
         return data_pod
 
-    def _call_hook(self, data_pod: BaseDataPod):
+    def _call_hook(self, data_pod: BaseDataPod | DataPod) -> BaseDataPod | DataPod:
         return data_pod

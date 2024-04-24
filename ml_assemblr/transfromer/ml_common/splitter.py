@@ -30,8 +30,6 @@ class ShuffleSplitter(FittingTransformer, DataFrameTransformer):
         np.random.seed(self.random_seed)
         data_pod.dfs[self.target_df_name][self.col_name] = self._split(df.shape[0])
 
-        # update column type
-        data_pod.column_types[self.target_df_name].splitters.append(self.col_name)
         return data_pod
 
     def _transform(self, data_pod: DataPod) -> DataPod:
@@ -39,7 +37,10 @@ class ShuffleSplitter(FittingTransformer, DataFrameTransformer):
         df = data_pod.dfs[self.target_df_name]
         df[self.col_name] = PRODUCTION
 
-        # update column type
+        return data_pod
+
+    def _call_hook(self, data_pod: DataPod) -> DataPod:
+        super()._call_hook(data_pod)
         data_pod.column_types[self.target_df_name].splitters.append(self.col_name)
         return data_pod
 

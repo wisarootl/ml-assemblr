@@ -115,8 +115,8 @@ def test_dp_delete_dfs_unexisting(some_dp: DataPod):
         assert cap_logs[0]["event"] == "There is no table name `unexisting_df` to delete."
 
 
-def test_dp_slice_df(some_dp_with_splitting: DataPod):
-    some_dp = some_dp_with_splitting
+def test_dp_slice_df(some_dps_with_splitting: tuple[DataPod, DataPod]):
+    some_dp, _ = some_dps_with_splitting
 
     # test columns slicing
     df = some_dp.slice_df(split=None, columns="label")
