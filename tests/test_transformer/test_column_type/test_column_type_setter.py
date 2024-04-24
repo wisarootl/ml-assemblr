@@ -1,5 +1,5 @@
 from ml_assemblr.main_components.data_pod import DataPod
-from ml_assemblr.transfromer.column_type.column_type_setter import ColumnTypeExtender, ColumnTypeSetter
+from ml_assemblr.transformer.column_type.column_type_setter import ColumnTypeExtender, ColumnTypeSetter
 
 
 def test_column_type_setter(

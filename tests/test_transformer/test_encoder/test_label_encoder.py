@@ -1,5 +1,5 @@
 from ml_assemblr.main_components.data_pod import DataPod
-from ml_assemblr.transfromer.encoder.label_encoder import LabelEncoder
+from ml_assemblr.transformer.encoder.label_encoder import LabelEncoder
 
 
 def test_label_encoder(some_dps_with_splitting: tuple[DataPod, DataPod]):

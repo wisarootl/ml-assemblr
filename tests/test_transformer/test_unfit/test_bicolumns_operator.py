@@ -4,7 +4,7 @@ import pandas as pd
 import pytest
 
 from ml_assemblr.main_components.data_pod import DataPod
-from ml_assemblr.transfromer.unfit.bicolumns_operator import BicolumnsOperator, plus
+from ml_assemblr.transformer.unfit.bicolumns_operator import BicolumnsOperator, plus
 
 
 @pytest.mark.parametrize(

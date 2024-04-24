@@ -1,6 +1,6 @@
 from ml_assemblr.main_components.data_pod import DataPod
-from ml_assemblr.transfromer.column_type.column_type_setter import ColumnTypeSetter
-from ml_assemblr.transfromer.column_type.features_setter import TopDownFeaturesSetter
+from ml_assemblr.transformer.column_type.column_type_setter import ColumnTypeSetter
+from ml_assemblr.transformer.column_type.features_setter import TopDownFeaturesSetter
 
 
 def test_top_down_features_setter(

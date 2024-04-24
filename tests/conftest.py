@@ -5,10 +5,10 @@ from sklearn.model_selection import ShuffleSplit
 from ml_assemblr.main_components.column_type import ColumnType
 from ml_assemblr.main_components.data_pod import DataPod
 from ml_assemblr.main_components.transformer import Serializer
-from ml_assemblr.transfromer.column_type.column_type_setter import ColumnTypeSetter
-from ml_assemblr.transfromer.column_type.features_setter import TopDownFeaturesSetter
-from ml_assemblr.transfromer.ml_common.cross_validator import CrossValidator
-from ml_assemblr.transfromer.ml_common.splitter import ShuffleSplitter
+from ml_assemblr.transformer.column_type.column_type_setter import ColumnTypeSetter
+from ml_assemblr.transformer.column_type.features_setter import TopDownFeaturesSetter
+from ml_assemblr.transformer.ml_common.cross_validator import CrossValidator
+from ml_assemblr.transformer.ml_common.splitter import ShuffleSplitter
 from ml_assemblr.utils.string_case_utils import to_snake_case
 
 

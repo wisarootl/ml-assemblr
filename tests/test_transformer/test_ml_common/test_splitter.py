@@ -2,7 +2,7 @@ import numpy as np
 import pytest
 
 from ml_assemblr.main_components.data_pod import DataPod
-from ml_assemblr.transfromer.ml_common.splitter import ShuffleSplitter
+from ml_assemblr.transformer.ml_common.splitter import ShuffleSplitter
 
 
 @pytest.mark.parametrize(

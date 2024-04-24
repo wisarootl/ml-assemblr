@@ -1,5 +1,5 @@
 from ml_assemblr.main_components.data_pod import DataPod
-from ml_assemblr.transfromer.cleaner.categorical_cleaner import CategoricalCleaner
+from ml_assemblr.transformer.cleaner.categorical_cleaner import CategoricalCleaner
 
 
 def test_categorical_cleaner(

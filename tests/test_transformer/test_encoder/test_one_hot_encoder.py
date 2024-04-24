@@ -1,5 +1,5 @@
 from ml_assemblr.main_components.data_pod import DataPod
-from ml_assemblr.transfromer.encoder.one_hot_encoder import OneHotEncoder
+from ml_assemblr.transformer.encoder.one_hot_encoder import OneHotEncoder
 
 
 def test_one_hot_encoder(some_dps_with_splitting: tuple[DataPod, DataPod]):
