@@ -2,7 +2,7 @@ from ml_assemblr.main_components.data_pod import DataPod
 from ml_assemblr.transfromer.unfit.aggregator import Aggregator
 
 
-def test_bicolumns_operator(
+def test_aggregator(
     some_dp: DataPod,
 ):
     prod_dp = some_dp.copy()

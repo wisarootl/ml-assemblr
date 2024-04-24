@@ -70,7 +70,9 @@ class DataFrameNode(BaseModel):
     df: pd.DataFrame
     column_type: ColumnType
 
-    def set_features_by_top_down_approach(self, excluded_types: Optional[list[str]] = None):
+    def set_features_by_top_down_approach(
+        self, excluded_types: Optional[set[str]] = None, excluded_col_names: Optional[set[str]] = None
+    ):
         all_columns = list(self.df.columns)
 
         if not excluded_types:
@@ -78,7 +80,7 @@ class DataFrameNode(BaseModel):
                 column_type for column_type in vars(self.column_type) if column_type not in {"features"}
             ]
 
-        excluded_columns = set(
+        all_excluded_col_names = set(
             [
                 column
                 for column_type in excluded_types
@@ -86,4 +88,9 @@ class DataFrameNode(BaseModel):
             ]
         )
 
-        self.column_type.features = [column for column in all_columns if column not in excluded_columns]
+        if excluded_col_names:
+            all_excluded_col_names = all_excluded_col_names.union(excluded_col_names)
+
+        self.column_type.features = [
+            column for column in all_columns if column not in all_excluded_col_names
+        ]
