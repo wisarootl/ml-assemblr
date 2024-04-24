@@ -26,4 +26,8 @@ def test_cross_validator(some_dps_with_splitting: tuple[DataPod, DataPod]):
         cv_test_idx = some_dp.main_df[some_dp.main_df[split_col_name] == "test"].index
         assert set(original_test_idx) == set(cv_test_idx)
 
+    assert "cv_idx_map" in some_dp.variables
+    assert "cv_split_idx_in_column_type" in some_dp.variables["cv_idx_map"]
+    assert some_dp.variables["cv_idx_map"]["cv_split_idx_in_column_type"] == [1, 2, 3]
+
     prod_dp = prod_dp.transform(some_dp.footprints.transformers[-1])

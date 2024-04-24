@@ -4,17 +4,16 @@ from ml_assemblr.main_components.data_pod import DataPod
 from ml_assemblr.main_components.transformer import DataFrameTransformer, FittingTransformer
 
 
-def get_model_index(dp: DataPod, cv_idx: int = 0):
-    for i in range(len(dp.footprints.transformers) - 1, 0, -1):
-        transformer = dp.footprints.transformers[i]
+def get_model_index(dp: DataPod, order: int = 0) -> Optional[int]:
+    for i, transformer in enumerate(dp.footprints.transformers):
         if isinstance(transformer, BaseModel):
-            if cv_idx == 0:
+            if order == 0:
                 return i
-            cv_idx -= 1
+            order -= 1
     return None
 
 
-def get_trained_model(dp: DataPod, model_index: int):
+def get_trained_model(dp: DataPod, model_index: int) -> Any:
     model_transformer = dp.footprints.transformers[model_index]
     return model_transformer.model
 

@@ -1,11 +1,13 @@
 import pandas as pd
 import pytest
+from sklearn.model_selection import ShuffleSplit
 
 from ml_assemblr.main_components.column_type import ColumnType
 from ml_assemblr.main_components.data_pod import DataPod
 from ml_assemblr.main_components.transformer import Serializer
 from ml_assemblr.transfromer.column_type.column_type_setter import ColumnTypeSetter
 from ml_assemblr.transfromer.column_type.features_setter import TopDownFeaturesSetter
+from ml_assemblr.transfromer.ml_common.cross_validator import CrossValidator
 from ml_assemblr.transfromer.ml_common.splitter import ShuffleSplitter
 from ml_assemblr.utils.string_case_utils import to_snake_case
 
@@ -100,5 +102,16 @@ def some_dps_with_features_setter(
 
     for i in range(start_footprint_idx, len(some_dp.footprints.transformers)):
         prod_dp = prod_dp.transform(some_dp.footprints.transformers[i])
+
+    return some_dp, prod_dp
+
+
+@pytest.fixture()
+def some_dps_with_cv(some_dps_with_features_setter: tuple[DataPod, DataPod]) -> tuple[DataPod, DataPod]:
+    some_dp, prod_dp = some_dps_with_features_setter
+    cross_validator = CrossValidator(sklearn_cv=ShuffleSplit(n_splits=3, test_size=0.2, random_state=42))
+    some_dp = some_dp.fit_transform(cross_validator)
+
+    prod_dp = prod_dp.transform(some_dp.footprints.transformers[-1])
 
     return some_dp, prod_dp
