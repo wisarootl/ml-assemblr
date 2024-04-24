@@ -30,6 +30,7 @@ mypy = "*"
 pre-commit = "*"
 nbformat = "^5.9.0"
 poetry-plugin-export = "^1.7.1"
+seaborn = "*"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^8.1.1"

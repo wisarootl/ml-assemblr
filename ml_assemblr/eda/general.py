@@ -7,8 +7,7 @@ from IPython.core.display_functions import display
 
 
 def investigate_basic_structure_df(df: pd.DataFrame):
-    print("row count: ", df.shape[0])
-    print("column count: ", df.shape[0])
+    print(f"{df.shape[0]} rows × {df.shape[1]} columns")
     print("== info ==")
     df.info()
     display(df.head())
