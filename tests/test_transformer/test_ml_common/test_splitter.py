@@ -13,7 +13,7 @@ from ml_assemblr.transfromer.ml_common.splitter import ShuffleSplitter
         for valid_size in np.arange(0, 1.2, 0.2)
     ],
 )
-def test_shuffle_splitter_fit_transform(some_dp: DataPod, test_size: float, valid_size: float):
+def test_shuffle_splitter(some_dp: DataPod, test_size: float, valid_size: float):
     prod_dp = some_dp.copy()
 
     if (test_size + valid_size > 1) or not (0 <= test_size <= 1) or not (0 <= valid_size <= 1):
