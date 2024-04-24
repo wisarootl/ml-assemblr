@@ -3,10 +3,9 @@ from ml_assemblr.transfromer.cleaner.categorical_cleaner import CategoricalClean
 
 
 def test_categorical_cleaner(
-    some_dp_with_splitting: DataPod,
+    some_dps_with_splitting: tuple[DataPod, DataPod],
 ):
-    some_dp = some_dp_with_splitting
-    prod_dp = some_dp.copy()
+    some_dp, prod_dp = some_dps_with_splitting
     categorical_cleaner = CategoricalCleaner(
         clean_categorical_columns_map={"gender": None, "department": None}
     )
