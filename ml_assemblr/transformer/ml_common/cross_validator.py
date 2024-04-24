@@ -64,7 +64,7 @@ def get_cv_folds(
     dp: DataPod,
     cv_idx_map_var_name: str = "cv_idx_map",
     cv_split_idx_in_column_type_var_name: str = "cv_split_idx_in_column_type",
-):
+) -> list[tuple[tuple, tuple]]:
     folds = []
     for idx in dp.variables[cv_idx_map_var_name][cv_split_idx_in_column_type_var_name]:
         split_col_name = dp.main_column_type.splitters[idx]

@@ -1,7 +1,7 @@
 from sklearn.model_selection import ShuffleSplit
 
 from ml_assemblr.main_components.data_pod import DataPod
-from ml_assemblr.transformer.ml_common.cross_validator import CrossValidator
+from ml_assemblr.transformer.ml_common.cross_validator import CrossValidator, get_cv_folds
 
 
 def test_cross_validator(some_dps_with_splitting: tuple[DataPod, DataPod]):
@@ -31,3 +31,14 @@ def test_cross_validator(some_dps_with_splitting: tuple[DataPod, DataPod]):
     assert some_dp.variables["cv_idx_map"]["cv_split_idx_in_column_type"] == [1, 2, 3]
 
     prod_dp = prod_dp.transform(some_dp.footprints.transformers[-1])
+
+
+def test_get_cv_folds(some_dps_with_cv):
+    some_dp, _ = some_dps_with_cv
+    folds = get_cv_folds(some_dp)
+
+    for i, fold in enumerate(folds):
+        train_idx, test_idx = fold
+        df = some_dp.main_df
+        assert set(df[df[f"split_{i}"] == "train"].index) == set(train_idx)
+        assert set(df[df[f"split_{i}"] == "valid"].index) == set(test_idx)
