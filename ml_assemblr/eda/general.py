@@ -1,8 +1,6 @@
 from collections.abc import Hashable, Sequence
 
-import matplotlib.pyplot as plt
 import pandas as pd
-import seaborn as sns
 from IPython.core.display_functions import display
 
 
@@ -19,10 +17,3 @@ def display_duplication(df: pd.DataFrame, primary_keys: Hashable | Sequence[Hash
 
     print("Duplicated primary keys ===")
     display(df[df.duplicated(subset=primary_keys, keep=False)])
-
-
-def display_missing_heatmap(df: pd.DataFrame):
-    plt.figure(figsize=(8, 6))
-    sns.heatmap(df.isnull(), cmap="viridis", cbar=False)
-    plt.title("Missing Values Heatmap")
-    plt.show()
