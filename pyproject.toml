@@ -13,13 +13,13 @@ pandas = "*"
 numpy = "*"
 structlog = "^24.1.0"
 orjson = "^3.10.1"
+
+[tool.poetry.group.optional.dependencies]
+scikit-learn = "^1.4.2"
 lightgbm = "*"
 xgboost = "*"
 catboost = "*"
 optuna = "*"
-
-[tool.poetry.group.optional.dependencies]
-scikit-learn = "^1.4.2"
 
 [tool.poetry.group.dev.dependencies]
 black = { version = "^24.2.0", extras = ["jupyter"] }
