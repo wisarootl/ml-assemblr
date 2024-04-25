@@ -6,7 +6,7 @@ authors = ["Wisaroot Lertthaweedech <l.wisaroot@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = ">=3.8,<4.0"
 pydantic = "^2.6.4"
 pydantic-settings = "^2.2.1"
 pandas = "*"
@@ -15,7 +15,7 @@ structlog = "^24.1.0"
 orjson = "^3.10.1"
 
 [tool.poetry.group.optional.dependencies]
-scikit-learn = "^1.4.2"
+scikit-learn = "*"
 lightgbm = "*"
 xgboost = "*"
 catboost = "*"
