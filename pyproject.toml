@@ -6,7 +6,7 @@ authors = ["Wisaroot Lertthaweedech <l.wisaroot@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.8"
 pydantic = "^2.6.4"
 pydantic-settings = "^2.2.1"
 pandas = "*"
