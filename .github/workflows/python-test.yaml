@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ['3.9', '3.10', '3.11', '3.12']
+        python-version: ['3.10', '3.11', '3.12']
     name: Test with Python ${{ matrix.python-version }}
 
     steps:
@@ -38,11 +38,11 @@ jobs:
         run: poetry install
 
       - name: Run tests with coverage
-        run: make test # Replace with your specific test command if necessary
+        run: make test
 
       - name: SonarCloud Scan (Optional)
-        uses: SonarSource/sonarcloud-github-action@master # Adjust version if needed
+        uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        if: ${{ success() }} # Run SonarCloud only on successful test runs
+        if: ${{ success() && matrix.python-version == '3.12' }}
