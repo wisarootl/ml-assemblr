@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Literal, Optional
 
 from ml_assemblr.main_components.data_pod import DataPod
 from ml_assemblr.main_components.transformer import DataFrameTransformer, FittingTransformer
@@ -13,15 +13,21 @@ def get_model_index(dp: DataPod, order: int = 0) -> Optional[int]:
     return None
 
 
-def get_trained_model(dp: DataPod, model_index: int) -> Any:
+def get_model_transformer(dp: DataPod, model_index: int) -> Any:
     model_transformer = dp.footprints.transformers[model_index]
-    return model_transformer.model
+    return model_transformer
 
 
 class BaseModel(FittingTransformer, DataFrameTransformer):
     pred_col_prefix: str = "pred"
     pred_col_name: Optional[str] = None
     label_idx_in_column_type: int = 0
+
+    # validation config
+    val_on_split: Optional[
+        Literal["train", "valid", "test", "production"]
+        | set[Literal["train", "valid", "test", "production"]]
+    ] = None
 
     # cross validation config
     cv_idx: Optional[int] = None

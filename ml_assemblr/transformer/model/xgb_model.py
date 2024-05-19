@@ -3,7 +3,7 @@ from typing import Any, Optional
 import pandas as pd
 import xgboost as xgb
 from optuna import Study
-from xgboost.core import Booster
+from xgboost.core import Booster, Metric
 
 from ml_assemblr.main_components.data_pod import DataPod
 
@@ -27,42 +27,78 @@ class XGBModel(BaseModel):
     xgb_params: dict[str, Any]
     num_boost_round: int = 10
 
+    # validation config
+    early_stopping_rounds: Optional[int] = None
+    is_maximize_metric: Optional[bool] = None
+    verbose_eval: Optional[bool | int] = False
+    custom_metric: Optional[Metric] = None
+
     # learnable parameter
     enable_categorical: Optional[bool] = None
     model: Optional[Booster] = None
 
     def _fit_transform(self, data_pod: DataPod) -> DataPod:
-        df_train = data_pod.slice_df(
+        df_train_features = data_pod.slice_df(
             split=self.fit_on_split,
-            columns=None,
+            columns="features",
+            table_name=self.target_df_name,
+            split_idx_in_column_type=self.split_idx_in_column_type,
+        )
+        df_train_label = data_pod.slice_df(
+            split=self.fit_on_split,
+            columns="label",
             table_name=self.target_df_name,
             split_idx_in_column_type=self.split_idx_in_column_type,
         )
 
-        label_col_name = data_pod.column_types[self.target_df_name].labels[self.label_idx_in_column_type]
-        df_train_features = df_train[data_pod.column_types[self.target_df_name].features]
-        df_train_label = df_train[label_col_name]
-
-        categorical_features = data_pod.column_types[self.target_df_name].categorical_features
-        if self.enable_categorical is None:
-            if categorical_features:
-                self.enable_categorical = True
-                df_train_features = self._correct_type_for_categorical_columns(
-                    df_train_features, categorical_features
-                )
-            else:
-                self.enable_categorical = False
+        df_train_features = self._correct_type_for_categorical_columns(
+            df_train_features, data_pod.column_types[self.target_df_name].categorical_features
+        )
 
         dtrain = xgb.DMatrix(
             df_train_features, label=df_train_label, enable_categorical=self.enable_categorical
         )
 
+        if self.val_on_split:
+            df_valid_features = data_pod.slice_df(
+                split=self.val_on_split,
+                columns="features",
+                table_name=self.target_df_name,
+                split_idx_in_column_type=self.split_idx_in_column_type,
+            )
+            df_valid_label = data_pod.slice_df(
+                split=self.val_on_split,
+                columns="label",
+                table_name=self.target_df_name,
+                split_idx_in_column_type=self.split_idx_in_column_type,
+            )
+            df_valid_features = self._correct_type_for_categorical_columns(
+                df_valid_features, data_pod.column_types[self.target_df_name].categorical_features
+            )
+            dval = xgb.DMatrix(
+                df_valid_features, label=df_valid_label, enable_categorical=self.enable_categorical
+            )
+
+            evals = [(dtrain, "train"), (dval, "valid")]
+        else:
+            evals = None
+
+        evals_result = {}
+
         self.model = xgb.train(
             params=self.xgb_params,
             dtrain=dtrain,
             num_boost_round=self.num_boost_round,
-            verbose_eval=False,
+            evals=evals,
+            maximize=self.is_maximize_metric,
+            evals_result=evals_result,
+            early_stopping_rounds=self.early_stopping_rounds,
+            verbose_eval=self.verbose_eval,
+            custom_metric=self.custom_metric,
         )
+
+        if self.val_on_split:
+            self.model = self.model[: self.model.best_iteration + 1]
 
         return self._transform(data_pod)
 
@@ -71,10 +107,9 @@ class XGBModel(BaseModel):
             split=None, columns="features", table_name=self.target_df_name
         )
 
-        if self.enable_categorical:
-            df_all_features = self._correct_type_for_categorical_columns(
-                df_all_features, data_pod.column_types[self.target_df_name].categorical_features
-            )
+        df_all_features = self._correct_type_for_categorical_columns(
+            df_all_features, data_pod.column_types[self.target_df_name].categorical_features
+        )
 
         dall = xgb.DMatrix(data=df_all_features, enable_categorical=self.enable_categorical)
 
@@ -85,5 +120,11 @@ class XGBModel(BaseModel):
     def _correct_type_for_categorical_columns(
         self, df: pd.DataFrame, categorical_col_names: list[str]
     ) -> pd.DataFrame:
-        df[categorical_col_names] = df[categorical_col_names].apply(lambda col: pd.Categorical(col))
+        if self.enable_categorical is None:
+            if categorical_col_names:
+                self.enable_categorical = True
+
+        if self.enable_categorical:
+            df[categorical_col_names] = df[categorical_col_names].apply(lambda col: pd.Categorical(col))
+
         return df
